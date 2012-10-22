@@ -1410,6 +1410,10 @@ strings.
 * Do not mess around in core classes when writing libraries. (Do not monkey
 patch them.)
 
+* Avoid the use of eval if at all possible
+  - Using eval to build a developer console is acceptable
+  - Using eval for DSL is similarly acceptable
+
 * The block form of `class_eval` is preferable to the string-interpolated form.
   - when you use the string-interpolated form, always supply `__FILE__` and `__LINE__`, so that your backtraces make sense:
 
