@@ -1257,6 +1257,16 @@ strings.
     name = 'Bozhidar'
     ```
 
+* Avoid declaring strings with mystical string concatenation
+
+    ```Ruby
+    # bad
+    name = "foo" "bar"  # name => "foobar"
+
+    # good
+    name = "foobar"     # name => "foobar"
+    ```
+
 * Don't use `{}` around instance variables being interpolated into a
   string.
 
@@ -1384,6 +1394,8 @@ strings.
     # good (requires interpolation, has quotes, single line)
     %(<tr><td class="name">#{name}</td>)
     ```
+
+* 
 
 * Use `%r` only for regular expressions matching *more than* one '/' character.
 
