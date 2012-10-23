@@ -1321,6 +1321,7 @@ strings.
     ```
     - Whitespace at the beginning of each line is included in a heredoc
       do not indent the contents of a heredoc.
+    - To strip whitespace out of heredoc see rails command [strip_heredoc()](http://apidock.com/rails/v3.2.8/String/strip_heredoc)
 
 ## Regular Expressions
 
@@ -1521,7 +1522,7 @@ patch them.)
 
     test = TestBox.new
     test.foo          # Succesfully call public method outside of class
-    # test.bar        # Fail to call private method outside of class
+    test.bar          # Fail to call private method outside of class
     test.send(:bar)   # Succesfully call private method outside of class
     ```
 
