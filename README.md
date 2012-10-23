@@ -1305,6 +1305,23 @@ strings.
     end
     ```
 
+* For heredocs use the form 
+
+    ```Ruby
+        variable <<-LABEL
+    Document List
+    ------------
+    1. Salad mix.
+    2. Strawberries.*
+    3. Cereal.
+    4. Milk.*
+    #{variable_that_will_be_passed_in}
+    * Organic ()
+        LABEL
+    ```
+    - Whitespace at the beginning of each line is included in a heredoc
+      do not indent the contents of a heredoc.
+
 ## Regular Expressions
 
 * Don't use regular expressions if you just need plain text search in string:
@@ -1394,8 +1411,6 @@ strings.
     # good (requires interpolation, has quotes, single line)
     %(<tr><td class="name">#{name}</td>)
     ```
-
-* 
 
 * Use `%r` only for regular expressions matching *more than* one '/' character.
 
@@ -1491,6 +1506,25 @@ patch them.)
   5 LOC. Empty lines do not contribute to the relevant LOC.
 * Avoid parameter lists longer than three or four parameters.
 * If you really have to, add "global" methods to Kernel and make them private.
+* Be careful with the use of the `send` method, as it allows calls to private methods
+    ```Ruby
+    class TestBox
+      def foo
+        puts "Foo"
+      end
+      
+      private
+      def bar
+        puts "Bar"
+      end
+    end
+
+    test = TestBox.new
+    test.foo          # Succesfully call public method outside of class
+    # test.bar        # Fail to call private method outside of class
+    test.send(:bar)   # Succesfully call private method outside of class
+    ```
+
 * Use class instance variables instead of global variables.
 
     ```Ruby
