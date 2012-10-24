@@ -1496,6 +1496,7 @@ patch them.)
 * If you really have to, add "global" methods to Kernel and make them private.
 * Be careful with the use of the `send` method, as it allows calls to private methods
   - this behavior could prove useful for unit testing private methods
+  
     ```Ruby
     class TestBox
       def foo
