@@ -1289,12 +1289,15 @@ strings.
     name = "foobar"     # name => "foobar"
     ```
 
-* Use `{}` around instance variables being interpolated into a
-  string.
+* Use `{}` around instance variables, class variables, and global variables 
+  being interpolated into a string.
 
     ```Ruby
+    $global_variable
     class Person
       attr_reader :first_name, :last_name
+
+      @@class_variable
 
       def initialize(first_name, last_name)
         @first_name = first_name
@@ -1303,12 +1306,12 @@ strings.
 
       # bad
       def to_s
-        "#@first_name #@last_name"
+        "#@first_name #@last_name #@@class_varaible #$global_variable"
       end
 
       # good
       def to_s
-        "#{@first_name} #{@last_name}"
+        "#{@first_name} #{@last_name} #{@@class_varaible} #{$global_variable}"
       end
     end
     ```
