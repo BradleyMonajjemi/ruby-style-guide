@@ -1152,7 +1152,7 @@ in *Ruby* now, not in *Python*.
 * Release external resources obtained by your program in an ensure
 block.
   - the block form of these commands will automatically do this, 
-  without the need of this rescue block
+  without the need of this rescue
 
     ```Ruby
     f = File.open('testfile')
