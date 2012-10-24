@@ -1152,9 +1152,15 @@ in *Ruby* now, not in *Python*.
 * Release external resources obtained by your program in an ensure
 block.
   - the block form of these commands will automatically do this, 
-  without the need of this rescue
+  without the need of the ensure
 
     ```Ruby
+    # bad
+    f = File.open('testfile')
+    # .. process
+    f.close
+
+    # good
     f = File.open('testfile')
     begin
       # .. process
@@ -1162,6 +1168,20 @@ block.
       # .. handle error
     ensure
       f.close unless f.nil?
+    end
+
+    # better, without error handling
+    File.open('testfile') do |f|
+      # .. process
+    end
+
+    # better, with error handling
+    File.open('testfile') do |f|
+      begin
+        # .. process
+      rescue
+        # .. handle error
+      end
     end
     ```
 
