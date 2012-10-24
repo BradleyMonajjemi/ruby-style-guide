@@ -1267,7 +1267,7 @@ strings.
     name = "foobar"     # name => "foobar"
     ```
 
-* Don't use `{}` around instance variables being interpolated into a
+* Use `{}` around instance variables being interpolated into a
   string.
 
     ```Ruby
@@ -1281,12 +1281,12 @@ strings.
 
       # bad
       def to_s
-        "#{@first_name} #{@last_name}"
+        "#@first_name #@last_name"
       end
 
       # good
       def to_s
-        "#@first_name #@last_name"
+        "#{@first_name} #{@last_name}"
       end
     end
     ```
@@ -1321,7 +1321,7 @@ strings.
     ```
     - Whitespace at the beginning of each line is included in a heredoc
       do not indent the contents of a heredoc.
-    - To strip whitespace out of heredoc see rails command [strip_heredoc()](http://apidock.com/rails/v3.2.8/String/strip_heredoc)
+    - To strip whitespace out of heredoc see rails command [strip_heredoc](http://apidock.com/rails/v3.2.8/String/strip_heredoc)
 
 ## Regular Expressions
 
@@ -1433,8 +1433,6 @@ strings.
 
 ## Metaprogramming
 
-* Avoid needless metaprogramming.
-
 * Do not mess around in core classes when writing libraries. (Do not monkey
 patch them.)
 
@@ -1450,26 +1448,6 @@ patch them.)
     ```
 
   - `define_method` is preferable to `class_eval{ def ... }`
-
-* When using `class_eval` (or other `eval`) with string interpolation, add a comment block showing its appearance if interpolated (a practice I learned from the rails code):
-
-    ```ruby
-    # from activesupport/lib/active_support/core_ext/string/output_safety.rb
-    UNSAFE_STRING_METHODS.each do |unsafe_method|
-      if 'String'.respond_to?(unsafe_method)
-        class_eval <<-EOT, __FILE__, __LINE__ + 1
-          def #{unsafe_method}(*args, &block)       # def capitalize(*args, &block)
-            to_str.#{unsafe_method}(*args, &block)  #   to_str.capitalize(*args, &block)
-          end                                       # end
-
-          def #{unsafe_method}!(*args)              # def capitalize!(*args)
-            @dirty = true                           #   @dirty = true
-            super                                   #   super
-          end                                       # end
-        EOT
-      end
-    end
-    ```
 
 * avoid using `method_missing` for metaprogramming. Backtraces become messy; the behavior is not listed in `#methods`; misspelled method calls might silently work (`nukes.launch_state = false`). Consider using delegation, proxy, or `define_method` instead.  If you must, use `method_missing`,
   - be sure to [also define `respond_to_missing?`](http://blog.marc-andre.ca/2010/11/methodmissing-politely.html)
@@ -1501,13 +1479,23 @@ patch them.)
 
 ## Misc
 
-* Write `ruby -w` safe code.
+* Write `ruby -w` safe code, -w is the warning option.
 * Avoid hashes as optional parameters. Does the method do too much?
-* Avoid methods longer than 10 LOC (lines of code). Ideally, most methods will be shorter than
-  5 LOC. Empty lines do not contribute to the relevant LOC.
 * Avoid parameter lists longer than three or four parameters.
+  - instead try to encapsulate methods in a class
+* Avoid declaring methods as optional parameters in a method definition.
+  - don't ever do this
+    ```Ruby
+    def foo(a, b=def foo(a); "F"; end)
+      a
+    end
+
+    p foo("W", 1) + foo("T") + foo("bar")      # => "WTF"
+    ```
+
 * If you really have to, add "global" methods to Kernel and make them private.
 * Be careful with the use of the `send` method, as it allows calls to private methods
+  - this behavior could prove useful for unit testing private methods
     ```Ruby
     class TestBox
       def foo
@@ -1545,7 +1533,6 @@ patch them.)
 * Avoid `alias` when `alias_method` will do.
 * Use `OptionParser` for parsing complex command line options and
 `ruby -s` for trivial command line options.
-* Code in a functional way, avoiding mutation when that makes sense.
 * Do not mutate arguments unless that is the purpose of the method.
 * Avoid more than three levels of block nesting.
 * Be consistent. In an ideal world, be consistent with these guidelines.
