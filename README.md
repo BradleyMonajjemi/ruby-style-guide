@@ -1151,6 +1151,8 @@ in *Ruby* now, not in *Python*.
 
 * Release external resources obtained by your program in an ensure
 block.
+  - the block form of these commands will automatically do this, 
+  without the need of this rescue block
 
     ```Ruby
     f = File.open('testfile')
@@ -1485,7 +1487,7 @@ patch them.)
   - instead try to encapsulate methods in a class
 * Avoid declaring methods as optional parameters in a method definition.
   - don't ever do this
-  
+
     ```Ruby
     def foo(a, b=def foo(a); "F"; end)
       a
